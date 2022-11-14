@@ -1,31 +1,69 @@
-var forms=document.getElementById('addform')
+var form = document.getElementById('addForm');
+var itemList = document.getElementById('items');
+var filter = document.getElementById('filter');
 
-var itemlist=document.getElementById('items')
+// Form submit event
+form.addEventListener('submit', addItem);
+// Delete event
+itemList.addEventListener('click', removeItem);
+// Filter event
+filter.addEventListener('keyup', filterItems);
 
-forms.addEventListener('submit',additem)
+// Add item
+function addItem(e){
+  e.preventDefault();
 
-itemlist.addEventListener('click',removeitem)
+  // Get input value
+  var newItem = document.getElementById('item').value;
+  var newDes= document.getElementById('description').value;
+  // Create new li element
+  var li = document.createElement('li');
+  // Add class
+  li.className = 'list-group-item';
+  // Add text node with input value
+  li.appendChild(document.createTextNode(newItem));
+  li.appendChild(document.createTextNode(" "+newDes));
 
-function additem(e){
-    e.preventDefault()
+  // Create del button element
+  var deleteBtn = document.createElement('button');
 
-    var inputvalue=document.getElementById('item').value
-    
-    var list=document.createElement('li')
-    list.className='list-group-item'
-    
-    list.appendChild(document.createTextNode(inputvalue))
+  // Add classes to del button
+  deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
 
-    var deletebtn=document.createElement('button')
-    deletebtn.className= 'btn btn-danger btn-sm float-right delete'
-    deletebtn.appendChild(document.createTextNode('X'))
-    list.appendChild(deletebtn)
-    itemlist.appendChild(list)   
+  // Append text node
+  deleteBtn.appendChild(document.createTextNode('X'));
+
+  // Append button to li
+  li.appendChild(deleteBtn);
+
+  // Append li to list
+  itemList.appendChild(li);
 }
 
-function removeitem(e){
-    if(e.target.classList.contains='delete'){
-        var li=e.target.parentElement
-        itemlist.removeChild(li)
+// Remove item
+function removeItem(e){
+  if(e.target.classList.contains('delete')){
+    if(confirm('Are You Sure?')){
+      var li = e.target.parentElement;
+      itemList.removeChild(li);
     }
+  }
+}
+
+
+function filterItems(e){
+  // convert text to lowercase
+  var text = e.target.value.toLowerCase();
+  // Get lis
+  var items = itemList.getElementsByTagName('li');
+  // Convert to an array
+  Array.from(items).forEach(function(item){
+    var itemName = item.firstChild.textContent;
+    var itemDes = item.childNodes[1].textContent;
+    if(itemName.toLowerCase().indexOf(text) != -1 || itemDes.toLowerCase().indexOf(text) != -1){
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
 }
