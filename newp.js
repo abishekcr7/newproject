@@ -5,17 +5,24 @@ form.addEventListener('submit',storeDetails)
 function storeDetails(e){
     e.preventDefault()
     var name=document.getElementById('uname').value 
-    var gender=document.getElementById('gender').value 
+    var emailid=document.getElementById('email').value 
     var age=document.getElementById('age').value 
     
-    localStorage.setItem('Name',name)
-    localStorage.setItem('Gender',gender)
-    localStorage.setItem('age',age)
 
     var userobj={
-        name:name,
-        Gender:gender,
-        age:age
+        'name':name,
+        'email':emailid,
+        'age':age
     }
-    localStorage.setItem('userinfo',JSON.stringify(userobj))
+    localStorage.setItem(userobj.email,JSON.stringify(userobj))
+
+    var userinfo=JSON.parse(localStorage.getItem(emailid))
+    var li = document.createElement('li')
+    li.className='Userinfo'
+    li.appendChild(document.createTextNode(userobj.name))
+    li.appendChild(document.createTextNode(" "+" "+userobj.email))
+    li.appendChild(document.createTextNode(" "+" "+userobj.age))
+
+    var itemList = document.getElementById('items')
+    itemList.appendChild(li)
 }
